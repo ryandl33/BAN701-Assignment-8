@@ -1,24 +1,19 @@
-# BAN 701 Assignment 8 - Dual-Approach Feature Implementation (AI-Assisted Track)
+# BAN 701 Assignment 9 - Dual-Approach Feature Implementation
 
-## Feature Specification: Excel Workbook Export
-* **Feature Name:** Automated `.xlsx` Roster Export
-* **Purpose:** Uses generative AI guidance (`openpyxl`) to export generated character rosters into a cleanly formatted Excel workbook saved directly to the user's Downloads directory.
-* **Expected Behavior:** 
-  1. Captures all characters generated during the active session.
-  2. Writes headers and data rows into an active worksheet titled "Character Roster".
-  3. Automatically calculates column widths to prevent clipped text.
-  4. Generates a timestamped filename (`characters_YYYYMMDD_HHMMSS.xlsx`) and saves it securely to the local `Downloads` folder.
-* **Tests Performed:**
-  * *Test Case 1:* Generated a batch of characters, selected option 2, and verified a formatted `.xlsx` file was successfully created in the Downloads directory.
-  * *Test Case 2:* Verified that auto-adjusted column widths properly fit all header and cell values without truncation errors.
+## Project Overview
+This repository demonstrates a dual-approach development workflow, comparing a manual coding approach against an AI-assisted approach across two isolated feature branches (`manual-feature` and `ai-feature`).
 
 ---
 
-## Feature Development Comparison: Manual vs. AI-Assisted Workflow
+## Feature Development Comparison
 
-| Metric / Dimension | Manual Track (`manual-feature`) | AI-Assisted Track (`ai-feature`) |
-| :--- | :--- | :--- |
-| **Primary Tooling & Libraries** | Standard library (`os`, `glob`, `pathlib`, `random`) | Third-party library (`openpyxl`) via AI guidance |
-| **Development Speed** | Slower; required manual syntax lookups for recursive directory traversal and relative path handling. | Faster; generative AI instantly provided working boilerplate for spreadsheet formatting and auto-width calculations. |
-| **Code Structure & Ergonomics** | Focused on system-level path resolution and fallback error handling. | Focused on data presentation, workbook styling, and user file-system organization (`Downloads` path detection). |
-| **Developer Experience** | High cognitive load on syntax correctness and debugging file paths manually. | Lower friction on boilerplate generation, allowing more focus on workflow integration and testing. |
+### Feature Overview & Approaches
+* **Manual Branch (`manual-feature`):** Implemented an automated random portrait image assignment feature using only Python’s standard libraries (`os`, `glob`, `pathlib`, `random`). This required writing custom path-traversal logic to recursively discover asset subfolders.
+* **AI Branch (`ai-feature`):** Implemented an Excel (`.xlsx`) roster export feature using the third-party `openpyxl` library guided by generative AI.
+
+### AI Code Evaluation & Modifications
+* **First-Attempt Accuracy:** The AI-produced `openpyxl` export code was functional overall but required a minor adjustment on the first attempt regarding operating system path resolution for the local `Downloads` directory.
+* **Modified / Rejected Code:** The initial snippet generated a hardcoded file path; it was modified to dynamically detect the OS environment (Windows vs. Unix) and implement auto-adjusted column width logic to ensure proper data formatting and prevent visual truncation.
+
+### Confidence & Reflection
+The manual approach provided greater confidence in foundational system-level handling (such as raw file paths and error management), while the AI approach significantly accelerated third-party library integration and boilerplate data styling. Combining both workflows highlighted how AI excels at rapid library implementation, whereas manual coding deepens structural control.
