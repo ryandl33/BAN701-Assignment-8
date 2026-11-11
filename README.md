@@ -1,35 +1,24 @@
-# Sci-Fi Character Generator
-BAN701 – Assignment 8
+# BAN 701 Assignment 8 - Dual-Approach Feature Implementation (AI-Assisted Track)
 
-## Project Description
-A simple Python program that generates random sci-fi characters for tabletop games. Each character gets a name, pronouns, background details, and stats.
+## Feature Specification: Excel Workbook Export
+* **Feature Name:** Automated `.xlsx` Roster Export
+* **Purpose:** Uses generative AI guidance (`openpyxl`) to export generated character rosters into a cleanly formatted Excel workbook saved directly to the user's Downloads directory.
+* **Expected Behavior:** 
+  1. Captures all characters generated during the active session.
+  2. Writes headers and data rows into an active worksheet titled "Character Roster".
+  3. Automatically calculates column widths to prevent clipped text.
+  4. Generates a timestamped filename (`characters_YYYYMMDD_HHMMSS.xlsx`) and saves it securely to the local `Downloads` folder.
+* **Tests Performed:**
+  * *Test Case 1:* Generated a batch of characters, selected option 2, and verified a formatted `.xlsx` file was successfully created in the Downloads directory.
+  * *Test Case 2:* Verified that auto-adjusted column widths properly fit all header and cell values without truncation errors.
 
-## Initial Version
-- **Random name and pronouns:** Picks a name from a list and assigns pronouns based on a dice roll.
-- **Background details:** Randomly selects an occupation, home planet or station, motivation, and quirk.
-- **Stats:** Rolls STR, SPD, INT, and COMBAT (2d10 + 25).
-- **Saves:** Rolls Sanity, Fear, and Body (2d10 + 10).
-- **Health:** Rolls HP (1d10 + 10).
-- **Menu:** Lets the user generate a character, view the export option (not available yet), or exit. Invalid input shows an error message.
+---
 
-## AI Tool Used
-Claude (Anthropic)
+## Feature Development Comparison: Manual vs. AI-Assisted Workflow
 
-## AI Assistance
-I used Claude to help add two features: exporting characters to a CSV file and generating multiple characters at once. I also used it for debugging guidance.
-
-## New or Modified Features
-- **Export to CSV (option 2):** Saves every character generated during the session to a timestamped CSV file that opens in Excel.
-- **Custom quantity (option 1):** Asks how many characters to generate (1–100) and validates the input, re-asking if it's not a whole number in range.
-
-## Evaluation of AI Output
-I accepted the CSV export and quantity input after testing them. I kept the timestamped filenames so each export creates a new file instead of overwriting the previous one. I kept the 100-character limit because generating more than that at once would be impractical.
-
-While integrating the export, I left an "Exported to CSV" message in the menu, then removed it because the export function already prints its own result, and the extra message showed even when nothing was exported.
-
-## How to Run the Program
-1. Install Python 3.
-2. Download or clone this repository.
-3. Open a terminal in the project folder.
-4. Run: `python main.py`
-5. Enter a menu number to choose an option.
+| Metric / Dimension | Manual Track (`manual-feature`) | AI-Assisted Track (`ai-feature`) |
+| :--- | :--- | :--- |
+| **Primary Tooling & Libraries** | Standard library (`os`, `glob`, `pathlib`, `random`) | Third-party library (`openpyxl`) via AI guidance |
+| **Development Speed** | Slower; required manual syntax lookups for recursive directory traversal and relative path handling. | Faster; generative AI instantly provided working boilerplate for spreadsheet formatting and auto-width calculations. |
+| **Code Structure & Ergonomics** | Focused on system-level path resolution and fallback error handling. | Focused on data presentation, workbook styling, and user file-system organization (`Downloads` path detection). |
+| **Developer Experience** | High cognitive load on syntax correctness and debugging file paths manually. | Lower friction on boilerplate generation, allowing more focus on workflow integration and testing. |
