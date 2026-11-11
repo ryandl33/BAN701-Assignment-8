@@ -1,5 +1,7 @@
 import random
 import csv
+import openpyxl
+import os
 from datetime import datetime
 
 #--- DATA ARRAYS ---
@@ -8,6 +10,40 @@ occupations = ["Company agent", "Maintenance worker", "Metallurgist", "Clerk", "
 home = ["Planet Proxima Centauri b", "Planet Kepler-186f", "Planet TRAPPIST-1e", "Planet TRAPPIST-1f", "Planet TRAPPIST-1g", "Planet LHS 1140 b", "Planet K2-18b", "Planet TOI-715 b", "Planet Gliese 667 Cc", "Planet Gliese 581 g", "Planet Kepler-442b", "Planet Kepler-62f", "Planet Kepler-22b", "Planet Kepler-1649c", "Planet Ross 128 b", "Planet Teegarden's Star b", "Planet L98-59 b", "Planet L98-59 c", "Planet TOI-849 b", "Planet HD 209458 b", "Planet WASP-12b", "Planet WASP-76b", "Planet WASP-121b", "Planet HAT-P-7b", "Planet CoRoT-7b", "Planet 51 Pegasi b", "Planet 55 Cancri e", "Planet GJ 1214 b", "Planet HD 189733 b", "Planet Kepler-10b", "Planet Kepler-10c", "Planet Kepler-20e", "Planet Kepler-20f", "Planet TOI-178 b", "Planet TOI-178 c", "Planet K2-72e", "Planet Wolf 1061c", "Planet Gliese 832 c", "Planet Gliese 667 Cb", "Planet Gliese 667 Cd", "Planet Kepler-69c", "Planet Kepler-452b", "Planet Kepler-1544b", "Planet Kepler-1638b", "Planet Kepler-296e", "Planet Kepler-296f", "Planet Kepler-1410b", "Planet Kepler-1552b", "Planet Kepler-1652b", "Planet Kepler-1701b", "Planet K2-3d", "Planet K2-9b", "Planet K2-187b", "Planet LTT 1445Ab", "Planet LHS 3844 b", "Planet GJ 357 b", "Planet GJ 357 c", "Planet GJ 357 d", "Planet TOI-270 b", "Planet TOI-270 c", "Planet TOI-270 d", "Planet HD 40307 g", "Planet HD 85512 b", "Planet HD 219134 b", "Planet HD 219134 c", "Planet 61 Virginis b", "Planet 47 Ursae Majoris b", "Planet 70 Virginis b", "Planet 14 Herculis b", "Planet 16 Cygni Bb", "Planet Epsilon Eridani b", "Planet Pollux b", "Planet Fomalhaut b", "Planet Beta Pictoris b", "Planet Beta Pictoris c", "Planet HR 8799 b", "Planet HR 8799 c", "Planet HR 8799 d", "Planet HR 8799 e", "Planet PDS 70b", "Planet PDS 70c", "Planet HIP 65426 b", "Planet YSES 2b", "Planet AF Leporis b", "Planet ROXs 42Bb", "Planet 2M1207b", "Planet AB Aurigae b", "Planet HD 106906 b", "Planet GQ Lupi b", "Planet DH Tauri b", "Planet WD 1856+534 b", "Planet PSR B1257+12 b", "Planet PSR B1257+12 c", "Planet PSR B1257+12 d", "Planet PSR B1620-26 b", "Planet UGPS J0722-0540", "Planet CFBDSIR 2149", "Planet VHS 1256 b", "Planet CWISE J1249", "Planet SIMP J013656", "Planet TOI-561 b", "Planet TOI-561 c", "Planet TOI-561 d", "Planet TOI-1255 b", "Planet K2-141b", "Planet K2-229b", "Planet WASP-43b", "Planet WASP-103b", "Planet WASP-18b", "Planet WASP-33b", "Planet HAT-P-26b", "Planet HAT-P-32b", "Planet CoRoT-1b", "Planet CoRoT-2b", "Planet Kepler-7b", "Planet Kepler-8b", "Planet Kepler-9b", "Planet Kepler-12b", "Planet Kepler-13b", "Planet Kepler-14b", "Planet Kepler-15b", "Planet Kepler-17b", "Planet Kepler-41b", "Planet Kepler-78b", "Planet Kepler-93b", "Planet Kepler-97b", "Planet Kepler-99b", "Planet Kepler-100b", "Planet Kepler-102b", "Planet Kepler-131b", "Planet Gliese 436 b", "Planet Gliese 3470 b", "Planet Gliese 1214 b", "Planet LHS 475 b", "Planet LP 890-9 c", "Planet SPECULOOS-2b", "Planet SPECULOOS-3b", "Planet K2-138b", "Planet K2-288Bb", "Planet Kepler-90b", "Planet Kepler-90c", "Planet Kepler-90d", "Planet Kepler-90e", "Planet Kepler-90f", "Planet Kepler-90g", "Planet Kepler-90h", "Planet Kepler-80g", "Planet Kepler-11f", "Planet Kepler-36c", "Planet HD 10180 b", "Planet HD 10180 c", "Planet HD 10180 d", "Planet HD 10180 e", "Planet HD 10180 f", "Planet HD 10180 g", "Station Anubis", "Station Oceanus", "Station Hades", "Station Hel", "Station Tiamat", "Station Wendel", "Station Enki", "Station Agloolik", "Station Banshee", "Station Belobog", "Station Loki", "Station Kali", "Station Artemis", "Station Mixcoatl", "Station Thoth", "Station Prometheus", "Station Nergal", "Station Crios", "Station Hestia", "Station Asiaq", "Station Poseidon", "Station Taranis", "Station Ashima", "Station Volturnus", "Station Legba", "Station Abatur", "Station Kanawha", "Station Styx", "Station Fenrir", "Station Zuriel", "Station Namtar", "Station Apollo", "Station Huxian", "Station Kannon", "Station Cailleach", "Station Vishnu", "Station Lucifer", "Station Gilgamesh", "Station Nyx", "Station Vipassi", "Station Azazel", "Station Nanook", "Station Demeter", "Station Thor", "Station Osiris", "Station Hypnos", "Station Kubera", "Station Vacuna", "Station Heimdall", "Station Kishar", "Station Diana", "Station Amitabha", "Station Harut", "Station Hyperion", "Station Gaia", "Station Vulcan", "Station Moloch", "Station Charon", "Station Hephaestus", "Station Odin", "Station Morpheus", "Station Calliope", "Station Orpheus", "Station Chemobog", "Station Hoderi", "Station Aphrodite", "Station Akna", "Station Bel", "Station Vesta", "Station Ogoun", "Station Persephone", "Station Wendigo", "Station Isimud", "Station Marut", "Station Minerva", "Station Perun", "Station Aurora", "Station Narada", "Station Freya", "Station Agni", "Station Rhea", "Station Horus", "Station Brigid", "Station Enlil", "Station Amarok", "Station Nerthus", "Station Ebisu", "Station Hermes", "Station Ra", "Station Sedna", "Station Lahmu", "Station Nerik", "Station Shiva", "Station Ares", "Station Minki", "Station Silvanus", "Station Metatron", "Station Marduk", "Station Dagda", "Station Zeus", "Station Axiom Prime", "Station Dust-95", "Station Zypher-X", "Station Solaria", "Station Core-Tex 4", "Station Scrapper's Run", "Station Vraks", "Station Nebula VII", "Station Vertex Minor", "Station Rust Horizon", "Station Krell-Nu", "Station Astral Major", "Station Quantum-B", "Station Dry Gulch", "Station Xylar", "Station Seraphim", "Station Helix Station", "Station Desolation Edge", "Station Ghor-Kha", "Station Nova Ceti", "Station Vector-99", "Station Nomad's End", "Station T'Kani", "Station Zenith", "Station Catalyst Alpha", "Station Badlands Echo", "Station Rha-Zul", "Station Horizon Line", "Station Synapse Beta", "Station Ash Ridge", "Station Orix-5", "Station Celestial Core", "Station Nexus-V", "Station Dead Mile", "Station Vaelen", "Station Aether Prime", "Station Matrix Theta", "Station Salvage-3", "Station Zyndar", "Station Starlight Delta", "Station Apex Synthetics", "Station Scorch Valley", "Station Kalt-7", "Station Oracle Minor", "Station Cypher-8", "Station Rogue's Nest", "Station Thrax-Nu", "Station Eclipse Major", "Station Protocol Delta", "Station Outer Rim 1", "Station Xeno-Prime", "Station Infinity's Edge", "Station Aethelgard", "Station Iron Forge", "Station Vanguard-01", "Station Void-Walker", "Station Crimson Deep", "Station Null-Sector", "Station Vector Point", "Station Cobalt Reach", "Station Zenith Gateway", "Station Phobos Deep", "Station Titan's Rest", "Station Bastion-4", "Station Dreadnought Bay", "Station Outpost Nine", "Station Centauri Post", "Station Helix Hub", "Station Neon Harbor", "Station Grid-Lock", "Station Singularity", "Station Event Horizon", "Station Pulsar-6", "Station Quasar Hold", "Station Dark Star", "Station Ironclad", "Station Sentry-X", "Station Watchtower", "Station Citadel Prime", "Station Beacon-7", "Station Flare-Point", "Station Corona Ridge", "Station Terminal-4", "Station Nexus Gateway", "Station Sector-Zero", "Station Alpha Port", "Station Omega Wharf", "Station Beta Dock", "Station Delta Harbor", "Station Gamma Bay", "Station Rogue Port", "Station Smuggler's Den", "Station Scrapper's Rest", "Station Drifter's Home", "Station Vagabond Post", "Station Nomad Hub", "Station Wayfarer's Rest", "Station Pilgrim's End", "Station Horizon Port", "Station Frontier Post", "Prospero's Dream"];
 motivations = ["Nostalgia","Asceticism","Survival","Perfectionism","Validation","Duty","Chaos","Tradition","Mystery","Bitterness","Redemption","Comfort","Zealotry","Nihilism","Gluttony","Empathy","Skepticism","Fatalism","Stoicism","Thrill-seeking","Shame","Worship","Discipline","Pity","Pride","Isolation","Heroism","Cowardice","Ambition","Obsession","Preservation","Restoration","Defiance","Obedience","Logic","Intuition","Rage","Solitude","Camaraderie","Proving others wrong","Efficiency","Minimalism","Luxury","Sacrifice","Symmetry","Evolution","Mutation","Immortality","Secrecy","Transparency","Mentorship","Rivalry","Worship of nature","Apathy","Melancholy","Nostalgia for the past","Technocracy","Tribalism","Patriotism","Martyrdom","Hedonism","Ascendance","Deception","Clarity","Wonder","Awe","Resilience","Adaptability","Serendipity","Harmony","Conflict","Ownership","Access","Influence","Legacy of blood","Historical revisionism","Scientific discovery","Spiritual enlightenment","Cultural preservation","Financial dominance","Political legacy","Emotional detachment","Sensory pleasure","Altruistic suffering","Radical transparency","Data collection","Narrative creation","Truth-seeking","De-evolution","Biological supremacy","Planetary colonization","Resource hoarding","Religious crusade","Family honor","Radical equality","Artistic immortality","Self-destruction","Quiet contemplation","Unchecked curiosity","Universal order"];
 quirks = ["Albino", "Chain smoker", "Constantly fidgets", "Nail biter", "Insomnia", "Whistles when nervous", "Collects unusual items", "Always hungry", "Cybernetic Limb (Cheap)", "Speaks Many languages", "Extreme pessimist", "Germophobe", "Nervous tick", "Always late", "Unusually short", "Too casual", "Facial scar", "Fear of heights", "Chronic liar", "Hums constantly", "Tattoos covering body", "Sleepwalker", "Missing fingers", "Snores loudly", "Afraid of AI", "Terrible sense of direction", "Afraid of the dark", "Stutter when stressed", "Paranoid", "Never makes eye contact", "Colorblind", "Inferiority complex", "Adrenaline Junkie", "High-pitched voice", "Sleeps with eyes open", "Afraid of Airlocks", "Claustrophobic", "Cybernetic Eyes", "Afraid of the vacuum", "Addiction to stims", "Glowing implants", "Always cold", "Speaks in third person", "Monotone voice", "Sweats profusely", "No sense of humor", "Never drinks alcohol", "Obsessed with cleanliness", "Fear of water", "Hoarder", "Makes bad jokes", "Eye patch", "Extremely muscular", "Facial piercings", "Afraid of Open Air", "Coward", "Trust issues", "Speaks very slowly", "Prosthetic eye", "Unusually tall", "Compulsive gambler", "Bright colored hair", "Always wears gloves", "Deep voice", "Constantly chewing gum", "Synth-skin patches", "Never sweats", "Unnaturally pale", "Afraid of Androids", "Heavy accent", "Twitchy", "Slow moving", "Prophetic dreams", "Self-loathing", "Lone wolf", "Imposter syndrome", "Bald by choice", "Always hot", "Transhumanist extremist", "Narcissist", "Believes in ancient aliens", "Blunt and rude", "Clumsy", "Always early", "Superiority complex", "Speaks very fast", "Foolishly brave", "Extremely thin", "Night owl", "Talks to themselves", "Fidgets with jewelry", "Can't keep a secret", "Believes in fate", "Catlike movements", "Overly formal", "Romantic", "Extreme optimist", "Photographic memory", "Hyperactive", "Conspiracy theorist", "Smells like ozone", "Constant dry cough", "Twitches when lying", "Always chewing fingernails", "Cracks knuckles constantly", "Wears mismatched boots", "Blind but perceptive", "Eats only ration bars", "Always checking doors", "Fears the shadows", "Obsessed with entomology", "Always whispers", "Refuses to sit down", "Walks with a limp", "Constantly adjusting gear", "Sungaze Maxing", "Hates silence", "Never blinks", "Bookworm", "Missing an arm", "Has a metallic taste", "Avoids metal surfaces", "Collects teeth", "Always looking up", "Taps rhythmically", "Chews on wire", "Wears tinted shades", "Hides their hands", "Grinds teeth", "Always has a plan", "Distrusts authority", "Hates own reflection", "Carries a dead plant", "Saves every scrap", "Abhors loud noises", "Keeps a secret stash", "Fears weaponry", "Enjoys the pain of others", "Avoids eye level", "Constantly breathes heavy", "Wears multiple layers", "Always counting steps", "Hates bright lights", "Finds patterns everywhere", "Always Tempermental", "Carries broken watch", "Avoids touching walls", "Talks to inanimate objects", "Always checking behind them", "Smells like rotten eggs", "Fears being alone", "Refuses to be scanned", "Obsessed with gun powder", "Wears heavy scent", "Always alert", "Fears authority", "Always has a knife", "Humms static noise", "Constantly scratches their scabs", "Enjoys solitude", "Hates Androids", "Licks their lips constantly", "Eyes dart toward exits", "Carries old paper maps", "Hates Marines", "Obsessed with vacuum chambers", "Wears headsphones", "Fist to initiate conversations", "Believes the planet is alive", "Always has hands in their pockets", "Always pushing an empty baby stroller", "Wears someone else's ID", "Always intoxicated", "Enjoys banter", "Hates enclosed spaces", "Obsessed with knowledge", "Speaks in cryptic phrases", "Mute", "Looks at the floor", "Twists hair/fingers", "Checks watch often", "Believes in the devil", "Uses archaic slang", "Avoids showering", "Always carries a light", "Carries themselves with dignity", "Walks on the balls of feet", "Hates mirrors", "Always ready to run", "Always prepared", "Overly cautious", "Wears goggles always", "Mildly deaf", "Avoids bright lights", "Opens up quickly", "Carries a heavy bag", "Speech impediment"];
+
+def export_to_excel(characters):
+    """Generates a formatted .xlsx Excel file and saves it to Downloads."""
+    if not characters:
+        print("\nNo characters to export yet. Generate one first.\n")
+        return
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Character Roster"
+
+    headers = list(characters[0].keys())
+    ws.append(headers)
+
+    for char in characters:
+        ws.append(list(char.values()))
+
+    for col in ws.columns:
+        max_len = max(len(str(cell.value or '')) for cell in col)
+        col_letter = openpyxl.utils.get_column_letter(col[0].column)
+        ws.column_dimensions[col_letter].width = max(max_len + 3, 12)
+
+    # Determine Downloads folder path
+    if os.name == 'nt':
+        downloads_dir = os.path.join(os.path.expanduser('~'), 'Downloads')
+    else:
+        downloads_dir = os.path.expanduser('~/Downloads')
+    os.makedirs(downloads_dir, exist_ok=True)
+
+    filename = "characters_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".xlsx"
+    full_path = os.path.join(downloads_dir, filename)
+
+    wb.save(full_path)
+    print(f"\nExported {len(characters)} character(s) to Excel successfully!\nSaved to: {full_path}\n")
 
 def generate_character():
     character = {}
@@ -47,26 +83,6 @@ def generate_character():
 
     return character
 
-def export_to_csv(characters):
-    """Save every character generated this session to a CSV file that opens in Excel."""
-    if not characters:
-        print("\nNo characters to export yet. Generate one first.\n")
-        return
-
-    # Timestamp in the filename so each export creates a new file instead of overwriting the last one
-    filename = "characters_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
-
-    try:
-        # utf-8-sig lets Excel display special characters (like ’ and ł in some names) correctly;
-        # newline="" prevents blank rows between lines on Windows
-        with open(filename, "w", newline="", encoding="utf-8-sig") as file:
-            writer = csv.DictWriter(file, fieldnames=characters[0].keys())
-            writer.writeheader()
-            writer.writerows(characters)
-        print(f"\nExported {len(characters)} character(s) to {filename}\n")
-    except PermissionError:
-        print("\nCould not save the file. Check that the folder isn't read-only and try again.\n")
-
 def get_quantity():
     """Ask how many characters to generate. Repeats until the user enters a valid whole number."""
     while True:
@@ -91,7 +107,7 @@ while True:
             print(f"\nCharacter {i + 1}:")
             print(new_character)    
     elif choice == "2":
-        export_to_csv(characters)
+        export_to_excel(characters)  # <--- Updated to call Excel export!
     elif choice == "3":
         print("\nClosing program.\n")
         break
