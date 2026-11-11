@@ -2,7 +2,7 @@
 BAN701 – Assignment 8
 
 ## Project Description
-A simple Python program that generates random sci-fi characters for tabletop games. Each character gets a name, pronouns, background details, and stats.
+A simple Python program that generates random sci-fi characters for tabletop games. Each character gets a name, pronouns, background details, stats, and a randomly assigned portrait image reference.
 
 ## Initial Version
 - **Random name and pronouns:** Picks a name from a list and assigns pronouns based on a dice roll.
@@ -10,26 +10,29 @@ A simple Python program that generates random sci-fi characters for tabletop gam
 - **Stats:** Rolls STR, SPD, INT, and COMBAT (2d10 + 25).
 - **Saves:** Rolls Sanity, Fear, and Body (2d10 + 10).
 - **Health:** Rolls HP (1d10 + 10).
-- **Menu:** Lets the user generate a character, view the export option (not available yet), or exit. Invalid input shows an error message.
+- **Menu:** Lets the user generate a character, export characters, or exit.
 
 ## AI Tool Used
 Claude (Anthropic)
 
 ## AI Assistance
-I used Claude to help add two features: exporting characters to a CSV file and generating multiple characters at once. I also used it for debugging guidance.
+Used for CSV export and quantity input logic, plus debugging guidance.
 
-## New or Modified Features
-- **Export to CSV (option 2):** Saves every character generated during the session to a timestamped CSV file that opens in Excel.
-- **Custom quantity (option 1):** Asks how many characters to generate (1–100) and validates the input, re-asking if it's not a whole number in range.
+## New or Modified Features (Manual-Feature Branch)
+- **Random Portrait Image Assignment:** Recursively scans local subfolders (`images/100 Android Faces` and `images/100 Human sci-fi faces`) to randomly assign a character portrait file path to each generated record.
+
+### Feature Specification: Random Portrait Assignment
+- **Feature Name:** Automated Random Image Assignment
+- **Purpose:** Automatically scans local asset directories and attaches a unique, random portrait path to every character record.
+- **Expected Behavior:** Locates the `images/` directory using absolute script paths, discovers valid image files recursively across subfolders, and selects one at random.
+- **Test Cases:**
+  1. *Test Case 1:* Generate 1 character; verify an absolute file path pointing to a valid image in the subfolders is included in the output.
+  2. *Test Case 2:* Generate 25 characters; verify unique random images are assigned across the batch without errors.
 
 ## Evaluation of AI Output
-I accepted the CSV export and quantity input after testing them. I kept the timestamped filenames so each export creates a new file instead of overwriting the previous one. I kept the 100-character limit because generating more than that at once would be impractical.
-
-While integrating the export, I left an "Exported to CSV" message in the menu, then removed it because the export function already prints its own result, and the extra message showed even when nothing was exported.
+Accepted CSV export and quantity input after testing. Kept timestamped filenames to prevent overwriting.
 
 ## How to Run the Program
-1. Install Python 3.
-2. Download or clone this repository.
-3. Open a terminal in the project folder.
-4. Run: `python main.py`
-5. Enter a menu number to choose an option.
+1. Install Python 3 and dependencies (`pip install openpyxl pillow`).
+2. Download or clone this repository and ensure an `images/` folder with subfolders is present.
+3. Run: `python main.py`
